@@ -3,6 +3,7 @@ services:
   backend:
     container_name: backend
     build: ./sample-application-backend
+    image: trankilemil/tp02-java
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/SchoolOrganisation
     networks:
@@ -23,6 +24,7 @@ services:
   frontend:
     container_name: frontend
     build: ./sample-application-frontend
+    image: trankilemil/tp02-node
     ports:
       - "80:80"
     networks:

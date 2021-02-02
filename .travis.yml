@@ -1,22 +1,60 @@
 git:
   depth: 5
+stages:
+  - "Build and Test"
+  - "Package"
+
 jobs:
   include:
-    - stage: "Build and Test Java"
-      language: java
+    - stage: "Build and Test"
       jdk: oraclejdk11
       before_script:
         - cd sample-application-backend
       script:
+        - echo "Maven build"
         - mvn clean install
-    - stage: "Build and Test Nodejs"
+        - echo "Run test coverage and Quality Gate"
+        - mvn test
+        - mvn clean verify sonar:sonar -Dsonar.projectKey=Emile-Bergin_sample-application-stud
+    - stage: "Build and Test"
       language: node.js
       node_js: "12.20"
       before_script:
         - cd sample-application-frontend
       script:
+        - echo "NPM install and build"
+        - npm install
+        - npm run build
         - npm run test
+    - stage: "Package"
+      before_script:
+        - cd sample-application-backend
+      script:
+        - echo "Docker build ..."
+        - docker-compose build
+        - echo "Docker login ..."
+        - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
+        - echo "Docker push ..."
+        - docker-compose push
+    - stage: "Package"
+      before_script:
+        - cd sample-application-frontend
+      script:
+        - echo "Docker build ..."
+        - docker-compose build
+        - echo "Docker login ..."
+        - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
+        - echo "Docker push ..."
+        - docker-compose push
 cache:
   directories:
     - "$HOME/.m2/repository"
     - "$HOME/.npm"
+services:
+  - docker
+
+addons:
+  sonarcloud:
+    organization: "emile-bergin"
+    token:
+      secure: "X0rZ9lBr9DLqDKZA74S6g/N4TYwvyeqgFFAKzc1wo1Ovm5+7WgBVioM5i+q+qpL3YlQn9tVrEFzVQmdpDcLRCtYiuxz3KSkxSi7OShxcDN2ZWYvm2Q7YAFUksxe10fgzju4ff6YNwfeKg8AggfNb44+bkeObMdSgAmLA8/5LeVdp8YA35o8/9AjpjjVaoYH5xbzrV0eWNrvAtDfgxm3sTBVMeMobwEUdbDcQtHfAQV1w67t0Q8/LxZZBPHYbIx+l5bMNAvrM5SQR+anJycO5sm+sR9fBlppvu2bI1dJS4/wIzXjf3rjmNgPzR032d48k8+La0ovCFKWuypIeFK+H1I+AuyqXCDUpJcUE4h4liY9McaGTFfnUJoQFGbRkqWoDKHb5JjU9kqLlGo6/1rNSq6cxSojxnwIQCYHsHA+sU6dGjY3hjKL2r1MfnvWBW89D4+PQ4dzJXuPmzCmDyLqfh4fYqeTV0V1B040+y5x6A/j5Se+hEFwQqJUsG/+oLkk9sKDI0+KKd8LuGwADKXjttMQSji6E75RTtJlt2B6LB1r5Pl4Ib8xwM0DFrCByYKqfPu74eyq9CKW7PFf0egbaoOiUBwWyoaaH2HFH9+msJpmEKYT6YZ0LYvAD2GUx2wbhiBvttpakQBiTcFVloo4w1I5CBKpP5zkle8TE3Y3B0gw="
