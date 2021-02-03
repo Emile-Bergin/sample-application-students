@@ -27,17 +27,16 @@ jobs:
         - npm install
         - npm run build
         - npm run test
-
     - stage: "Package"
-        before_script:
-          - cd sample-application-backend
-        script:
-          - echo "Docker build ..."
-          - docker build -t trankilemil/tp02-java .
-          - echo "Docker login ..."
-          - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
-          - echo "Docker push ..."
-          - docker push trankilemil/tp02-java
+      before_script:
+        - cd sample-application-backend
+      script:
+        - echo "Docker build ..."
+        - docker build -t trankilemil/tp02-java .
+        - echo "Docker login ..."
+        - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
+        - echo "Docker push ..."
+        - docker push trankilemil/tp02-java
     - stage: "Package"
       before_script:
         - cd sample-application-frontend
@@ -49,8 +48,9 @@ jobs:
         - echo "Docker push ..."
         - docker push trankilemil/tp02-node
     - stage: "deploy"
-      before_script: cd ansible
-      script: :
+      before_script:
+        - cd ansible
+      script:
         - ansible-playbook -i inventories/setup.yml playbook.yml
 
 cache:
