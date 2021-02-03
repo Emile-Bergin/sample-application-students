@@ -26,6 +26,7 @@ jobs:
         - npm install
         - npm run build
         - npm run test
+        
     - stage: "Package"
         before_script:
           - cd sample-application-backend
