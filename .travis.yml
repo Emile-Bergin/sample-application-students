@@ -27,25 +27,25 @@ jobs:
         - npm run build
         - npm run test
     - stage: "Package"
-      before_script:
-        - cd sample-application-backend
-      script:
-        - echo "Docker build ..."
-        - docker-compose build
-        - echo "Docker login ..."
-        - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
-        - echo "Docker push ..."
-        - docker-compose push
+        before_script:
+          - cd sample-application-backend
+        script:
+          - echo "Docker build ..."
+          - docker build -t trankilemil/tp02-java .
+          - echo "Docker login ..."
+          - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
+          - echo "Docker push ..."
+          - docker push trankilemil/tp02-java
     - stage: "Package"
       before_script:
         - cd sample-application-frontend
       script:
         - echo "Docker build ..."
-        - docker-compose build
+        - docker build -t trankilemil/tp02-node
         - echo "Docker login ..."
         - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
         - echo "Docker push ..."
-        - docker-compose push
+        - docker push trankilemil/tp02-node
 cache:
   directories:
     - "$HOME/.m2/repository"
