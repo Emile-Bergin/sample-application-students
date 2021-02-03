@@ -41,7 +41,7 @@ jobs:
         - cd sample-application-frontend
       script:
         - echo "Docker build ..."
-        - docker build -t trankilemil/tp02-node
+        - docker build -t trankilemil/tp02-node .
         - echo "Docker login ..."
         - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
         - echo "Docker push ..."
