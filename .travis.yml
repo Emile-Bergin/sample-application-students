@@ -1,4 +1,3 @@
-#TEST
 git:
   depth: 5
 stages:
