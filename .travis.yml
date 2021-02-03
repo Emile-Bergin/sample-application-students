@@ -3,6 +3,7 @@ git:
 stages:
   - "Build and Test"
   - "Package"
+  - "deploy"
 
 jobs:
   include:
@@ -26,7 +27,7 @@ jobs:
         - npm install
         - npm run build
         - npm run test
-        
+
     - stage: "Package"
         before_script:
           - cd sample-application-backend
@@ -47,6 +48,11 @@ jobs:
         - echo "$DOCKER_HUB_Password" | docker login -u "$DOCKER_HUB_Username" --password-stdin
         - echo "Docker push ..."
         - docker push trankilemil/tp02-node
+    - stage: "deploy"
+      before_script: cd ansible
+      script: :
+        - ansible-playbook -i inventories/setup.yml playbook.yml
+
 cache:
   directories:
     - "$HOME/.m2/repository"

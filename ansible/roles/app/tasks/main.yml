@@ -1,0 +1,13 @@
+- name: Launch app
+#docker run -d --network app-network --name backend -e SPRING_DATASOURCE_URL="jdbc:postgresql://database:5432/SchoolOrganisation" vebervi/backend
+  docker_container:
+    name: backend
+    state: started
+    restart_policy: always
+    image: trankilemil/tp02-java
+    pull: true
+    detach: yes
+    networks:
+      - name: app-network
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/SchoolOrganisation

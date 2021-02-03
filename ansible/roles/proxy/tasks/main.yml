@@ -1,0 +1,13 @@
+- name: Launch proxy
+#docker run -d --network app-network --name frontend -p 80:80 vebervi/frontend
+  docker_container:
+    name: frontend
+    state: started
+    restart_policy: always
+    image: trankilemil/tp02-node
+    pull: true
+    detach: yes
+    ports:
+      - "80:80"
+    networks:
+      - name: app-network

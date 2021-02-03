@@ -1,0 +1,9 @@
+- hosts: all
+  roles:
+    - docker
+    - network
+    - database
+    - app
+    - proxy
+  gather_facts: false
+  become: yes
