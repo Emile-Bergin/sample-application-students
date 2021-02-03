@@ -3,6 +3,7 @@ git:
 stages:
   - "Build and Test"
   - "Package"
+  
 jobs:
   include:
     - stage: "Build and Test"
