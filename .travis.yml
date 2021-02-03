@@ -50,6 +50,7 @@ jobs:
     - stage: "deploy"
       before_script:
         - cd ansible
+        - apt-get install ansible
       script:
         - ansible-playbook -i inventories/setup.yml playbook.yml
 
