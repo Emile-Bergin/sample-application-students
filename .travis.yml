@@ -50,8 +50,9 @@ jobs:
     - stage: "deploy"
       before_script:
         - sudo apt-get install openssl
-        - cat inventories/emile.bergin | openssl aes-256-cbc -d -a -pass pass:"$KEYPASS" > inventories/emile.bergin
-        - cd ansible
+        - cd ansible/inventories
+        - cat emile.bergin | openssl aes-256-cbc -d -a -pass pass:"$KEYPASS" > emile.bergin
+        - cd ..
         #- echo "$Server_SHH_KEY" >> inventories/emile.bergin
         - sudo apt-get install ansible
       script:
